@@ -50,6 +50,7 @@ public class ConsumerMsgTest extends BaseJunitClz {
 //        // 参数： 要监听的queue、是否自动确认消息、使用的Consumer
 //        channel.basicConsume(QUEUE_NAME, true, consumer) ;
         // 手动签收消息
+        channel.basicQos(16);
         DefaultConsumer consumer = new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {

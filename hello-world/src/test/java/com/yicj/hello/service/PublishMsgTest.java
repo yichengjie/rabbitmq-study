@@ -4,6 +4,7 @@ package com.yicj.hello.service;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 import com.yicj.hello.BaseJunitClz;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class PublishMsgTest extends BaseJunitClz {
         String msg = "hello " ; // 消息内容
         String routing_key = "my_routing_key.key1" ; // 发送消息使用routing-key
         // 消息是byte[]，可以传递所有类型（转换为byte[]）, 不局限与字符串
-        channel.basicPublish(EXCHANGE_NAME, routing_key, null, msg.getBytes(StandardCharsets.UTF_8));
+        channel.basicPublish(EXCHANGE_NAME, routing_key, MessageProperties.PERSISTENT_TEXT_PLAIN, msg.getBytes(StandardCharsets.UTF_8));
         log.info("send message : {}", msg);
         // 关闭连接
         channel.close();
