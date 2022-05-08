@@ -1,13 +1,11 @@
 package com.yicj.hello.service;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.*;
 import com.yicj.hello.BaseJunitClz;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Slf4j
 public class PublishMsgTest extends BaseJunitClz {
@@ -43,8 +41,18 @@ public class PublishMsgTest extends BaseJunitClz {
         // 发送消息
         String msg = "hello world" ; // 消息内容
         String routing_key = "my_routing_key.key1" ; // 发送消息使用routing-key
+        // 消息properties
+        String uuid = UUID.randomUUID().toString();
+        AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder() ;
+        builder.contentType("text/plain") ;
+        builder.deliveryMode(2) ;
+        builder.priority(0) ;
+        builder.messageId(uuid) ;
         // 消息是byte[]，可以传递所有类型（转换为byte[]）, 不局限与字符串
-        channel.basicPublish(EXCHANGE_NAME, routing_key, MessageProperties.PERSISTENT_TEXT_PLAIN, msg.getBytes(StandardCharsets.UTF_8));
+        channel.basicPublish(EXCHANGE_NAME,
+                routing_key,
+                builder.build(),
+                msg.getBytes(StandardCharsets.UTF_8));
         //channel.basicPublish(EXCHANGE_NAME, routing_key, null, msg.getBytes(StandardCharsets.UTF_8));
         log.info("send message : {}", msg);
         // 关闭连接

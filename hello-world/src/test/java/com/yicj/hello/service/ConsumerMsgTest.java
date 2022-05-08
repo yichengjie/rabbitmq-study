@@ -16,7 +16,7 @@ public class ConsumerMsgTest extends BaseJunitClz {
     private final static String EXCHANGE_ROUTING_KEY = "my_routing_key.#" ; // exchange使用的routing-key
 
     @Test
-    public void receive() throws IOException, TimeoutException {
+    public void receive() throws IOException, TimeoutException, InterruptedException {
         // 创建连接工厂
         ConnectionFactory connectionFactory = new ConnectionFactory() ;
         connectionFactory.setHost("192.168.99.201");
@@ -55,17 +55,17 @@ public class ConsumerMsgTest extends BaseJunitClz {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body) ;
                 log.info("====> msg: {}", msg);
+                log.info("properties : {}", properties);
                 // 处理完成后，应答签收
                 channel.basicAck(envelope.getDeliveryTag(), false);
                 // 拒收
-                channel.basicReject(envelope.getDeliveryTag(), true);
+                //channel.basicReject(envelope.getDeliveryTag(), true);
             }
         } ;
         // 监听指定的queue会一直监听
         // 参数：要监听的queue、是否自动确认消息、使用的Consumer
         channel.basicConsume(QUEUE_NAME, false, consumer) ;
-
-        BasicProperties properties = new AMQP.BasicProperties() ;
+        Thread.sleep(1000);
         // 关闭连接
         channel.close();
         connection.close();
