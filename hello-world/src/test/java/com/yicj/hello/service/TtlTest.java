@@ -7,12 +7,12 @@ import com.rabbitmq.client.MessageProperties;
 import com.yicj.hello.BaseJunitClz;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+//延迟消息： https://github.com/rabbitmq/rabbitmq-delayed-message-exchange
 @Slf4j
 public class TtlTest extends BaseJunitClz {
 
