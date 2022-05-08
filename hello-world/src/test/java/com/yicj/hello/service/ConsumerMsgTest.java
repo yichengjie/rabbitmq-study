@@ -4,7 +4,6 @@ import com.rabbitmq.client.*;
 import com.yicj.hello.BaseJunitClz;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
@@ -39,16 +38,16 @@ public class ConsumerMsgTest extends BaseJunitClz {
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, EXCHANGE_ROUTING_KEY) ;
         // 创建消费者，指定要使用的channel, QueueingConsume类已经废弃，使用DefaultConsumer替代
         // 自动签收消息
-//        DefaultConsumer consumer = new DefaultConsumer(channel){
-//            @Override
-//            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-//                String msg = new String(body) ;
-//                log.info("====> msg : {}", msg);
-//            }
-//        } ;
-//        // 监听指定的queue，会一直监听
-//        // 参数： 要监听的queue、是否自动确认消息、使用的Consumer
-//        channel.basicConsume(QUEUE_NAME, true, consumer) ;
+        //DefaultConsumer consumer = new DefaultConsumer(channel){
+        //    @Override
+        //    public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+        //        String msg = new String(body) ;
+        //        log.info("====> msg : {}", msg);
+        //    }
+        //} ;
+        //// 监听指定的queue，会一直监听
+        //// 参数： 要监听的queue、是否自动确认消息、使用的Consumer
+        //channel.basicConsume(QUEUE_NAME, true, consumer) ;
         // 手动签收消息
         channel.basicQos(16);
         DefaultConsumer consumer = new DefaultConsumer(channel){
@@ -66,6 +65,7 @@ public class ConsumerMsgTest extends BaseJunitClz {
         // 参数：要监听的queue、是否自动确认消息、使用的Consumer
         channel.basicConsume(QUEUE_NAME, false, consumer) ;
 
+        BasicProperties properties = new AMQP.BasicProperties() ;
         // 关闭连接
         channel.close();
         connection.close();

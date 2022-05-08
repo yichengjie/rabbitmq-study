@@ -1,6 +1,5 @@
 package com.yicj.hello.service;
 
-
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -12,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class PublishMsgTest extends BaseJunitClz {
-
     private final static String QUEUE_NAME = "my_queue" ; // 队列名称
     private final static String EXCHANGE_NAME = "my_exchange" ; // 要使用的exchange的名称
     private final static String EXCHANGE_TYPE = "topic" ; // 要使用的exchange的类型
@@ -43,10 +41,11 @@ public class PublishMsgTest extends BaseJunitClz {
         // 将queue绑定至某个exchange，一个exchange可以绑定多个queue
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, EXCHANGE_ROUTING_KEY) ;
         // 发送消息
-        String msg = "hello " ; // 消息内容
+        String msg = "hello world" ; // 消息内容
         String routing_key = "my_routing_key.key1" ; // 发送消息使用routing-key
         // 消息是byte[]，可以传递所有类型（转换为byte[]）, 不局限与字符串
         channel.basicPublish(EXCHANGE_NAME, routing_key, MessageProperties.PERSISTENT_TEXT_PLAIN, msg.getBytes(StandardCharsets.UTF_8));
+        //channel.basicPublish(EXCHANGE_NAME, routing_key, null, msg.getBytes(StandardCharsets.UTF_8));
         log.info("send message : {}", msg);
         // 关闭连接
         channel.close();
