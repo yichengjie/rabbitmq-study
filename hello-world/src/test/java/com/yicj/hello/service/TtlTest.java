@@ -56,15 +56,17 @@ public class TtlTest extends BaseJunitClz {
         //
         Connection connection = connectionFactory.newConnection();
         Channel channel = connection.createChannel();
-        //
+        // 交换机申明
         channel.exchangeDeclare("exchange.dlx", "direct", true) ;
         channel.exchangeDeclare("exchange.normal", "fanout", true) ;
+        // 队列申明并绑定交换机
         Map<String,Object> args = new HashMap<>() ;
         args.put("x-message-ttl", 10000) ;
         args.put("x-dead-letter-exchange", "exchange.dlx") ;
         args.put("x-dead-letter-routing-key", "routingKey") ;
         channel.queueDeclare("queue.normal", true, false, false, args) ;
         channel.queueBind("queue.normal","exchange.normal","") ;
+        // 队列申明并绑定交换机
         channel.queueDeclare("queue.dlx", true, false, false, null) ;
         channel.queueBind("queue.dlx", "exchange.dlx", "routingKey") ;
         // 发送消息
